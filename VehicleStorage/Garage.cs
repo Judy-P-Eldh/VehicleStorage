@@ -16,7 +16,6 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
         do
         {
             //Validate size
-
             if (!Validations.ValidateUInt(size))
             {
                 Console.WriteLine("Please, enter a number bigger than 0.");
@@ -39,7 +38,7 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
         //Add vehicle
         for (uint i = 0; i < Size; i++)
         {
-           if(vehicles[i] == default(T))
+            if (vehicles[i] == default(T))
             {
                 vehicles[i] = vehicle;
                 count++;
@@ -50,7 +49,7 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
     }
     public bool UnparkVehicles(T vehicle) //Hur ska regnr komma dit från GarageHandler?
     {
-        
+
         //Check if garage is empty
         Console.WriteLine(vehicles.Count());
 
@@ -66,34 +65,21 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
                 if (vehicles[i] == vehicle)
                 {
                     vehicles[i] = null;
-                    count--;    
+                    count--;
                     return true;
                 }
             }
         }
         return false;
     }
-    //public void FindV()
-    //{
-    //    var v = vehicles.OrderBy(v => v.Brand);
-    //    v = v.OrderBy(v => v.Color);
-    //    v = v.OrderBy(v => v.Regnr);
-    //    v = v.OrderBy(v => v.MaxSpeed);
-
-    //    foreach (var item in vehicles)
-    //    {
-             
-    //    }
-
-    //}
 
     // Denna definierar vad som händer när vi gör en foreach på ett garage                  
     public IEnumerator<T> GetEnumerator()
     {
         for (int i = 0; i < vehicles.Length; i++)
         {
-                 if(vehicles[i] != null)
-                yield return vehicles[i];   
+            if (vehicles[i] != null)
+                yield return vehicles[i];
         }
     }
 

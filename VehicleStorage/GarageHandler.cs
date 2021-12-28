@@ -70,7 +70,9 @@ internal class GarageHandler
         //Ver 2
         return  garage.Any(v => v.Regnr == input);
     }
-    internal IEnumerable<Vehicle?> Find(string regnr, string color, double maxSpeed, string brand, int doors, int wheels, int beds, int engines, int seats, object vehicleType)//(SearchParams searchParams)
+
+    //Funkar inte. Hur ska alla parametrarna komma in?
+    internal IEnumerable<Vehicle?> Find(string regnr, string color, double maxSpeed, string brand, int doors, int wheels, int beds, int engines, int seats)//(SearchParams searchParams)
     {
         IEnumerable<Vehicle> result = garage.ToList();
         if (regnr != null && regnr != " ")
@@ -92,13 +94,9 @@ internal class GarageHandler
             Validations.BigLetters(brand);
             result = result.Where(v => v.Brand == brand);
         }
-        if (vehicleType != null)
-        {
-            result = result.Where(v => v.GetType().Name == vehicleType);
-        }
         if (wheels != 0)
         {
-            result = result.Where(v => v.GetType().Name == vehicleType);
+           
         }
 
         return result.ToList();

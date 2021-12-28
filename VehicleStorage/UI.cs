@@ -12,7 +12,6 @@ public class UI
         Console.WriteLine(
             "\t1: Create a garage\n" +
             "\t0: Exit");
-
     }
     public uint GarageSize()  
     {
@@ -41,7 +40,7 @@ public class UI
             "\t2: Park new vehicle\n" +
             "\t3: Examine garage\n" +
             "\t4: Unpark vehicles\n" +
-            "\t5: Find vehicles\n" +
+            "\t5: Find vehicles\n" +  //Funkar inte ännu
             "\t0: Exit");
     }
 

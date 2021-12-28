@@ -36,7 +36,7 @@ public class Manager
                 UserParking();
                 break;
             case '3':
-                //Examine
+                //Examine garage
                 PrintVehicles();
                 break;
             case '4':
@@ -61,7 +61,6 @@ public class Manager
     }
     private void UserParking()
     {
-        //Behöver returnera en Vehicle
         Console.WriteLine("Park vehicle");
         Console.WriteLine("1. Car");
         Console.WriteLine("2. Boat");
@@ -97,7 +96,6 @@ public class Manager
                 break;
         }
     }
-
     private void Park(string vehicleType)
     {
         //Collect common parameters (Vehicle)
@@ -155,47 +153,72 @@ public class Manager
                         ui.Print("Enter a number bigger than 0.");
                     }
                 } while (doors <= 0);
-                
-                //Create car object
                 //Send car to handler.Park 
                 handler.ParkUserVehicle(regnr, color, maxSpeed, brand, doors);
                 //Print message
-                ui.Print($"Your vehicle is parked.");
-                Console.ReadKey();
+                MessageParkedVehicle();
                 break;
             case "Boat":
-                //Collect car parameters
-                int beds;
-                //Create car object
-                //Send car to handler.Park
+                //Collect boat parameters
+                int beds = Validations.MakeInt(Console.ReadLine());
+                ui.Print("Number of beds?");
+                if (beds < 0)
+                {
+                    beds = 0;
+                }
+
+                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, beds);
                 //Print message
+                MessageParkedVehicle();
                 break;
             case "Airplane":
-                //Collect car parameters
-                int engines;
-                //Create car object
-                //Send car to handler.Park
+                //Collect airplane parameters
+                int engines = Validations.MakeInt(Console.ReadLine());
+                ui.Print("Number of engines?");
+                if (engines < 0)
+                {
+                    engines = 0;
+                    ui.Print("Consider repair for your airplaine.");
+                }
+
+                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, engines);
                 //Print message
+                MessageParkedVehicle();
                 break;
             case "Bus":
-                //Collect car parameters
-                int seats;
-                //Create car object
-                //Send car to handler.Park
+                //Collect bus parameters
+                int seats = Validations.MakeInt(Console.ReadLine());
+                ui.Print("Number of seats?");
+                if (seats < 0)
+                {
+                    seats = 0;
+                    ui.Print("No passangers for you. Consider repair for your bus.");
+                }
+
+                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, seats);
                 //Print message
+                MessageParkedVehicle();
                 break;
             case "Motorcycle":
-                //Collect car parameters
-                int wheels;
-                //Create car object
-                //Send car to handler.Park
+                //Collect motorcycle parameters
+                int wheels = Validations.MakeInt(Console.ReadLine());
+                ui.Print("Number of wheels?");
+                if (wheels < 2)
+                    ui.Print("Consider repair for your motorcycle.");
+
+                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, wheels);
                 //Print message
+                MessageParkedVehicle();
                 break;
             default:
                 break;
         }
+    }
 
-
+    private void MessageParkedVehicle()
+    {
+        ui.Print($"Your vehicle is parked.");
+        Console.ReadKey();
     }
 
     private void RegNoAlreadyExist(out string regnr, out bool notValidRegNo)
@@ -256,8 +279,18 @@ public class Manager
             switch (input)
             {
                 case '1':
-                    ui.Print("How many vehicles do you want to store?");
-                    uint garageSize = ui.GarageSize();
+                    uint garageSize;
+                    do
+                    {
+                        ui.Print("How many vehicles do you want to store?");
+                        garageSize = ui.GarageSize();
+                        if (garageSize <= 0)
+                        {
+                            ui.Print($"Your garage needs more than {garageSize} spaces. Pease, try again.");
+
+                        }
+                    } while (garageSize <= 0);
+
                     handler.CreateGarage(garageSize);
                     ui.Print($"You created a garage with {garageSize} spaces.");
                     success = true;
