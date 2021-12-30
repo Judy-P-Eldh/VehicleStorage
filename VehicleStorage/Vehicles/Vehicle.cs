@@ -7,41 +7,45 @@ public abstract class Vehicle
     private string color;
     private string brand;
 
-    public string Regnr 
-    { 
-        get { return regnr; } 
-        set 
+    public virtual string VehicleType => this.GetType().Name;
+
+    public string Regnr
+    {
+        get { return regnr; }
+        set
         {
             Validations.BigLetters(value);
-            regnr = value; 
-        } 
+            regnr = value;
+        }
     }
 
     public double MaxSpeed
     {
         get { return maxSpeed; }
-        set 
+        set
         {
             Validations.ValidateDouble(value);
-            maxSpeed = value; 
+            maxSpeed = value;
         }
     }
 
-    public string  Color 
-    { 
+    public string Color
+    {
         get { return color; }
-        set 
+        set
         {
             Validations.CheckString(value);
+            Validations.BigLetters(value);
             color = value;
         }
     }
-    public string Brand 
-    { 
+    public string Brand
+    {
         get { return brand; }
-        set 
-        { 
+        set
+        {
             Validations.CheckString(value);
+            Validations.BigLetters(value);
             brand = value;
         }
     }
@@ -57,7 +61,10 @@ public abstract class Vehicle
 
     public override string ToString()
     {
-        return $"\n\tVehicle type {this.GetType().Name}";
+        return $"\n\tFacts" +
+               $"---------------------" +
+               $"\n\tVehicle type: {this.GetType().Name}, Regnr: { Regnr.ToUpper()}, Color: { Color.ToUpper()}" +
+               $", Max speed: {MaxSpeed}, Brand: {Brand.ToUpper()}";
     }
 
 }

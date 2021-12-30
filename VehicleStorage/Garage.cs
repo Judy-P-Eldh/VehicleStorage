@@ -10,7 +10,7 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
     public int Count => count;
     public uint Size { get; }
 
-    public bool IsFull => Count >= Size;  //vehicles.Where(v => v != null).Count() >= Size;
+    public bool IsFull => Count >= Size; 
     public Garage(uint size)
     {
         do
@@ -26,7 +26,7 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
         } while (!true);
     }
     //Create a collection of vehicles
-    public bool ParkVehicles(T vehicle)     //Det går att parkera fler än arrayens storlek.
+    public bool ParkVehicles(T vehicle) 
     {
         //Check if spaces left
         //Console.WriteLine(vehicles.Count());
@@ -49,7 +49,6 @@ public class Garage<T> : IEnumerable<T> where T : Vehicle
     }
     public bool UnparkVehicles(T vehicle) //Hur ska regnr komma dit från GarageHandler?
     {
-
         //Check if garage is empty
         Console.WriteLine(vehicles.Count());
 

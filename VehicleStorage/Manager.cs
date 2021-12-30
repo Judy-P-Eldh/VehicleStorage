@@ -1,4 +1,6 @@
-﻿namespace VehicleStorage;
+﻿using VehicleStorage.Vehicles;
+
+namespace VehicleStorage;
 
 public class Manager
 {
@@ -61,39 +63,46 @@ public class Manager
     }
     private void UserParking()
     {
-        Console.WriteLine("Park vehicle");
-        Console.WriteLine("1. Car");
-        Console.WriteLine("2. Boat");
-        Console.WriteLine("3. Airplane");
-        Console.WriteLine("4. Bus");
-        Console.WriteLine("5. Motorcycle");
-
-        var input = Console.ReadLine();
-
-        switch (input)
+        if (handler.FullGarage())
         {
-            case "1":
-                //Park Car
-                Park("Car");
-                break;
-            case "2":
-                //Park Boat
-                Park("Boat");
-                break;
-            case "3":
-                //Park Airplane
-                Park("Airplane");
-                break;
-            case "4":
-                //Park Bus
-                Park("Bus");
-                break;
-            case "5":
-                //Park Motorcycle
-                Park("Motorcycle");
-                break;
-            default:
-                break;
+            ui.Print("Sorry, no space available.");
+        }
+        else
+        {
+            ui.Print("Park vehicle");
+            ui.Print("1. Car");
+            ui.Print("2. Boat");
+            ui.Print("3. Airplane");
+            ui.Print("4. Bus");
+            ui.Print("5. Motorcycle");
+
+            var input = Console.ReadLine();
+
+            switch (input)
+            {
+                case "1":
+                    //Park Car
+                    Park("Car");
+                    break;
+                case "2":
+                    //Park Boat
+                    Park("Boat");
+                    break;
+                case "3":
+                    //Park Airplane
+                    Park("Airplane");
+                    break;
+                case "4":
+                    //Park Bus
+                    Park("Bus");
+                    break;
+                case "5":
+                    //Park Motorcycle
+                    Park("Motorcycle");
+                    break;
+                default:
+                    break;
+            }
         }
     }
     private void Park(string vehicleType)
@@ -101,11 +110,13 @@ public class Manager
         //Collect common parameters (Vehicle)
 
         ui.Print("Provide the facts about your vehicle.");
+
+        //Regnr
         string regnr;
+        
+        RegNoAlreadyExist(out regnr, out bool notValidRegNo);
 
-        bool notValidRegNo;
-        RegNoAlreadyExist(out regnr, out notValidRegNo);
-
+        //Color
         bool notValidString;
         string color;
         do
@@ -120,6 +131,7 @@ public class Manager
         } while (notValidString);
         color.ToLower();
 
+        //Max Speed
         ui.Print("Maximum speed?");
         double maxSpeed = Validations.MakeDouble(Console.ReadLine());
 
@@ -128,6 +140,7 @@ public class Manager
             ui.Print("Consider repair for your vehicle.");
         }
 
+        //Brand
         ui.Print("The brand?");
         string brand = Console.ReadLine();
         bool invalidString = string.IsNullOrWhiteSpace(brand);
@@ -139,6 +152,7 @@ public class Manager
         } while (invalidString);
         Validations.Letters(brand);
 
+        //Switch
         switch (vehicleType)
         {
             case "Car":
@@ -154,59 +168,61 @@ public class Manager
                     }
                 } while (doors <= 0);
                 //Send car to handler.Park 
-                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, doors);
+                handler.ParkUserVehicle(new Car (regnr, color, maxSpeed, brand, doors));
                 //Print message
                 MessageParkedVehicle();
                 break;
             case "Boat":
                 //Collect boat parameters
-                int beds = Validations.MakeInt(Console.ReadLine());
                 ui.Print("Number of beds?");
+                int beds = Validations.MakeInt(Console.ReadLine());
                 if (beds < 0)
                 {
                     beds = 0;
                 }
 
-                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, beds);
+                handler.ParkUserVehicle(new Boat(regnr, color, maxSpeed, brand, beds));
                 //Print message
                 MessageParkedVehicle();
                 break;
             case "Airplane":
                 //Collect airplane parameters
-                int engines = Validations.MakeInt(Console.ReadLine());
                 ui.Print("Number of engines?");
+                int engines = Validations.MakeInt(Console.ReadLine());
                 if (engines < 0)
                 {
                     engines = 0;
                     ui.Print("Consider repair for your airplaine.");
                 }
 
-                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, engines);
+                handler.ParkUserVehicle(new Airplane(regnr, color, maxSpeed, brand, engines));
                 //Print message
                 MessageParkedVehicle();
                 break;
             case "Bus":
                 //Collect bus parameters
-                int seats = Validations.MakeInt(Console.ReadLine());
                 ui.Print("Number of seats?");
+                int seats = Validations.MakeInt(Console.ReadLine());
                 if (seats < 0)
                 {
                     seats = 0;
                     ui.Print("No passangers for you. Consider repair for your bus.");
                 }
 
-                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, seats);
+                handler.ParkUserVehicle(new Bus(regnr, color, maxSpeed, brand, seats));
                 //Print message
                 MessageParkedVehicle();
                 break;
             case "Motorcycle":
                 //Collect motorcycle parameters
-                int wheels = Validations.MakeInt(Console.ReadLine());
                 ui.Print("Number of wheels?");
+                int wheels = Validations.MakeInt(Console.ReadLine());  
                 if (wheels < 2)
+                {
                     ui.Print("Consider repair for your motorcycle.");
+                }
 
-                handler.ParkUserVehicle(regnr, color, maxSpeed, brand, wheels);
+                handler.ParkUserVehicle(new Motorcycle(regnr, color, maxSpeed, brand, wheels));
                 //Print message
                 MessageParkedVehicle();
                 break;
@@ -237,19 +253,32 @@ public class Manager
             {
                 ui.Print("Reg number needs to be unique. Try again.");
             }
-
         } while (notValidRegNo);
     }
 
-    private void Search()
+    private void Search()  
     {
-        ui.Print("\nSearch by regnr, color, brand or max speed:");
-        var input = Console.ReadLine();
+        ui.Print("\nSearch by reg number");
+        string regNo = Console.ReadLine().ToUpper(); ;            
+        
+        ui.Print("\nSearch by color");
+        string color = Console.ReadLine().ToUpper();
 
-        var result = handler.FindByRegNo(input);
+        ui.Print("\nSearch by brand");
+        string brand = Console.ReadLine().ToUpper();
 
-        if (result != null)
-            ui.Print(result.ToString());
+        ui.Print("\nSearch by type");
+        string vehicleType = Console.ReadLine().ToUpper();
+
+        var result = handler.Find(regNo, color, brand, vehicleType);
+
+        if (result != null)     //Det funkar bara att söka på regnr, men jag vet inte varför.  
+        {
+            foreach (var vehicle in result)
+            {
+                ui.Print("Found: " + vehicle.ToString());
+            }
+        }
         else
         {
             ui.Print("Not found");
@@ -266,7 +295,6 @@ public class Manager
         }
         Console.ReadKey();
     }
-
     internal bool Initialize()
     {
         bool success = false;

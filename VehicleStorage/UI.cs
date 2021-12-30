@@ -29,7 +29,6 @@ public class UI
         Console.Title = "Garage";
         Console.CursorVisible = false;
     }
-
     internal void ShowGarageMeny()
     {
         //Clear();
@@ -43,12 +42,10 @@ public class UI
             "\t5: Find vehicles\n" +  //Funkar inte ännu
             "\t0: Exit");
     }
-
     internal void Clear()
     {
         Console.Clear();
     }
-
     internal void Print(string message)
     {
         Console.WriteLine(message);

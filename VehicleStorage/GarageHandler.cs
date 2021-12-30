@@ -31,7 +31,10 @@ internal class GarageHandler
 
         for (int i = 0; i < garage.Size -2; i++)
         {
-            garage.ParkVehicles(vehicles[i]);
+            if (!RegNrExist(vehicles[i].Regnr))
+            {
+                garage.ParkVehicles(vehicles[i]);
+            }
         }
     }
     //Examine garage
@@ -39,12 +42,27 @@ internal class GarageHandler
     {
         return garage.ToList();
     }
+    internal bool FullGarage()
+    {
+        if (garage.IsFull)
+        {
+            return true;
+        }
+        return false;
+    }
 
-    internal void ParkUserVehicle(string? regnr, string? color, double maxSpeed, string? brand, int doors)
+    internal void ParkUserVehicle(Vehicle vehicle/*, string? regnr, string? color, double maxSpeed, string? brand, int doors, int wheels = 0, int engines = 0, int beds = 0, int seats = 0*/)
     {
         //Validate
-           var userCar = new Car(regnr, color, maxSpeed, brand, doors);
-           garage.ParkVehicles(userCar);
+        if (garage.IsFull)
+        {
+            Console.WriteLine("Full. Sorry.");  
+        }
+        else
+        {
+            garage.ParkVehicles(vehicle);
+            Console.WriteLine($"Free spaces left: {garage.Size - garage.Count}");
+        }
     }
 
     internal string Unpark(string regNo)
@@ -70,35 +88,31 @@ internal class GarageHandler
         //Ver 2
         return  garage.Any(v => v.Regnr == input);
     }
-
-    //Funkar inte. Hur ska alla parametrarna komma in?
-    internal IEnumerable<Vehicle?> Find(string regnr, string color, double maxSpeed, string brand, int doors, int wheels, int beds, int engines, int seats)//(SearchParams searchParams)
+    internal IEnumerable<Vehicle?> Find(string regnr, string color, string brand, string vehicleType)
     {
-        IEnumerable<Vehicle> result = garage.ToList();
-        if (regnr != null && regnr != " ")
+        IEnumerable<Vehicle> result = garage.ToList();    
+                                                         //Något gör att det inte fungerar att söka på annat än regnr
+        if (!string.IsNullOrWhiteSpace(regnr))
         {
             Validations.BigLetters(regnr);
             result = result.Where(v => v.Regnr == regnr);
         }
-        if (color != null && color != " ")
+        if (!string.IsNullOrWhiteSpace(color))
         {
             Validations.BigLetters(color);
             result = result.Where(v => v.Color == color);
         }
-        if ((maxSpeed != 0) && (maxSpeed != double.NaN))
-        {
-            result = result.Where(v => v.MaxSpeed == maxSpeed);
-        }
-        if (brand != null && brand != " ")
+        if (!string.IsNullOrWhiteSpace(brand))
         {
             Validations.BigLetters(brand);
             result = result.Where(v => v.Brand == brand);
         }
-        if (wheels != 0)
+        if (!string.IsNullOrWhiteSpace(vehicleType))
         {
-           
+            Validations.BigLetters(vehicleType);
+            result = result.Where(v => v.VehicleType == vehicleType);
         }
 
-        return result.ToList();
+        return result.ToList(); 
     }
 }
