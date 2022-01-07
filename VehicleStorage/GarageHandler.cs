@@ -88,10 +88,10 @@ internal class GarageHandler
         //Ver 2
         return  garage.Any(v => v.Regnr == input);
     }
-    internal IEnumerable<Vehicle?> Find(string regnr, string color, string brand, string vehicleType)
+    internal List<Vehicle> Find(string regnr, string color, string brand, string vehicleType)
     {
-        IEnumerable<Vehicle> result = garage.ToList();    
-                                                         //Något gör att det inte fungerar att söka på annat än regnr
+        IEnumerable<Vehicle> result = garage.ToList();
+
         if (!string.IsNullOrWhiteSpace(regnr))
         {
             Validations.BigLetters(regnr);
@@ -114,5 +114,59 @@ internal class GarageHandler
         }
 
         return result.ToList(); 
+    }
+
+    public void GarageStats()
+    {
+        //Cars: 1
+        //Busses: 4
+        //Airplanes: 2
+
+
+        //int nrofCars = 0;
+        //int nrofBusses = 0;
+        //int nrofAirplanes = 0;
+        //int nrofBoats = 0;
+        //int nrofMotorcycles = 0;
+
+        var allVehicles = GetVehicles();
+
+        //foreach (var vehicle in allVehicles)
+        //{
+        //    if (vehicle.VehicleType == "Car")
+        //    {
+        //        nrofCars++;
+        //    }
+        //    if (vehicle.VehicleType == "Bus")
+        //    {
+        //        nrofBusses++;
+        //    }
+        //    if (vehicle.VehicleType == "Boat")
+        //    {
+        //        nrofBoats++;
+        //    }
+        //    if (vehicle.VehicleType == "Airplane")
+        //    {
+        //        nrofAirplanes++;
+        //    }
+        //    if (vehicle.VehicleType == "Motorcycle")
+        //    {
+        //        nrofMotorcycles++;
+        //    }
+        //}
+
+        //Console.WriteLine("Garage statistics:");
+        //Console.WriteLine($"    Cars: {nrofCars}");
+        //Console.WriteLine($"    Busses: {nrofBusses}");
+        //Console.WriteLine($"    Boats: {nrofBoats}");
+        //Console.WriteLine($"    Airplane: {nrofAirplanes}");
+        //Console.WriteLine($"    Motorcycle: {nrofMotorcycles}");
+
+        var g = allVehicles.GroupBy(v => v.VehicleType);
+
+        foreach (var vehicle in g)
+        {
+            Console.WriteLine($"{vehicle.Key}: {vehicle.Count()}");
+        }
     }
 }

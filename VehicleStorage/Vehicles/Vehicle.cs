@@ -31,12 +31,12 @@ public abstract class Vehicle
 
     public string Color
     {
-        get { return color; }
+        get { return color; } //bLuE
         set
         {
             Validations.CheckString(value);
             Validations.BigLetters(value);
-            color = value;
+            color = value.ToUpper();
         }
     }
     public string Brand

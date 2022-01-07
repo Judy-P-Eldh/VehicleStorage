@@ -52,6 +52,10 @@ public class Manager
                 //Search
                 Search();
                 break;
+            case '6':
+                //Search
+                handler.GarageStats();
+                break;
             case '0':
                 Environment.Exit(0);
                 break;
